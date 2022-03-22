@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -7,13 +8,19 @@ import List from '@mui/material/List';
 
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+
+import {
+  ChevronLeft,
+  ChevronRight,
+  Apps,
+  Menu,
+  ContactMail,
+  AssignmentInd,
+  Home
+ } from '@mui/icons-material';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 
 import Content from '../content/Content'
 
@@ -47,8 +54,45 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
+const listItems = [
+  {
+    listIcon: <Home />,
+    listText: "Dashboard",
+    linkTo: "/"
+  },
+  {
+    listIcon: <AssignmentInd />,
+    listText: "Login",
+    linkTo: "/login"
+  },
+  {
+    listIcon: <Apps />,
+    listText: "Register",
+    linkTo: "/register"
+  },
+  {
+    listIcon: <ContactMail />,
+    listText: "Contacts",
+    linkTo: "/contacts"
+  }
+];
+
+const listItemSecond = [
+  {
+    listIcon: <Home />,
+    listText: "Settings",
+    linkTo: "/settings"
+  },
+  {
+    listIcon: <AssignmentInd />,
+    listText: "About Us",
+    linkTo: "/about-us"
+  }
+];
+
 export default function PersistentDrawerLeft(props) {
   const theme = useTheme();
+  const location = useLocation()
 
   const handleDrawerClose = () => {
     props.setOpenDrawer(false);
@@ -72,28 +116,60 @@ export default function PersistentDrawerLeft(props) {
       >
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+            {theme.direction === 'ltr' ? <ChevronLeft /> : <ChevronRight />}
           </IconButton>
         </DrawerHeader>
         <Divider />
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+          {listItems.map((listItem, index) => (
+            <ListItem 
+              component={Link} 
+              key={index} 
+              to={listItem.linkTo}
+              selected={listItem.linkTo === location.pathname} 
+              sx={(theme) => ({
+                ...theme.typography.body,
+                color: theme.palette.primary.main,
+              })}
+            >
+              <ListItemIcon 
+                sx={(theme) => ({
+                  ...theme.typography.body,
+                  color: theme.palette.primary.main,
+                })}
+              >
+                {listItem.listIcon}
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText 
+                primary={listItem.listText}
+              />
             </ListItem>
           ))}
         </List>
         <Divider />
         <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+          {listItemSecond.map((listItem, index) => (
+            <ListItem 
+              component={Link} 
+              key={index} 
+              to={listItem.linkTo}
+              selected={listItem.linkTo === location.pathname} 
+              sx={(theme) => ({
+                ...theme.typography.body,
+                color: theme.palette.primary.main,
+              })}
+            >
+              <ListItemIcon 
+                sx={(theme) => ({
+                  ...theme.typography.body,
+                  color: theme.palette.primary.main,
+                })}
+              >
+                {listItem.listIcon}
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText 
+                primary={listItem.listText}
+              />
             </ListItem>
           ))}
         </List>
